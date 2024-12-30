@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Blog Application</title>
+  <style>
+    /* CSS */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+
+    header {
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    #blogForm, .blog {
+      background: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .blog {
+      border: 1px solid #ddd;
+    }
+
+    .blog h2 {
+      margin-top: 0;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .actions button {
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .actions button:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <!-- HTML -->
+  <header>
+    <h1>Simple Blog Application</h1>
+  </header>
+
+  <section>
+    <form id="blogForm">
+      <h2>Add New Blog Post</h2>
+      <label for="title">Title:</label>
+      <input type="text" id="title" required>
+      
+      <label for="content">Content:</label>
+      <textarea id="content" required></textarea>
+      
+      <button type="submit">Add Blog Post</button>
+    </form>
+
+    <div id="blogContainer">
+      <h2>Blog Posts</h2>
+      <!-- Blog posts will be dynamically added here -->
+    </div>
+  </section>
+
+  <script>
+    // JavaScript
+    const blogForm = document.getElementById('blogForm');
+    const blogContainer = document.getElementById('blogContainer');
+
+    let blogs = []; // Array to store blog posts
+
+    // Function to render blog posts
+    function renderBlogs() {
+      blogContainer.innerHTML = '<h2>Blog Posts</h2>';
+      blogs.forEach((blog, index) => {
+        const blogDiv = document.createElement('div');
+        blogDiv.classList.add('blog');
+        blogDiv.innerHTML = `
+          <h2>${blog.title}</h2>
+          <p>${blog.content}</p>
+          <div class="actions">
+            <button onclick="editBlog(${index})">Edit</button>
+            <button onclick="deleteBlog(${index})">Delete</button>
+          </div>
+        `;
+        blogContainer.appendChild(blogDiv);
+      });
+    }
+
+    // Add new blog post
+    blogForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      
+      blogs.push({ title, content });
+      blogForm.reset();
+      renderBlogs();
+    });
+
+    // Edit a blog post
+    function editBlog(index) {
+      const newTitle = prompt('Enter new title:', blogs[index].title);
+      const newContent = prompt('Enter new content:', blogs[index].content);
+
+      if (newTitle && newContent) {
+        blogs[index] = { title: newTitle, content: newContent };
+        renderBlogs();
+      }
+    }
+
+    // Delete a blog post
+    function deleteBlog(index) {
+      blogs.splice(index, 1);
+      renderBlogs();
+    }
+  </script>
+</body>
+</html>
